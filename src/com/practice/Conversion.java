@@ -1,8 +1,8 @@
 package com.practice;
 
-import java.util.ArrayList;
 
 public class Conversion {
+    private static int amountDigits;
 
     public String solution(int n) {
         switch(n) {
@@ -36,26 +36,29 @@ public class Conversion {
                 return "M";
             default: //parsing
                 int[] arr = converting(n);
-                for(int i = 0; i < arr.length; i++){
-                    System.out.println(arr[i]);
+                for(int j : arr) {
+                    System.out.print(j);
                 }
+                System.out.println("\n" + amountDigits);
         }
         return "?";
     }
-    private int[] converting(int n){
+
+    private int[] converting(int n) {
         int counter = 0;
         int temp = n;
         while(n > 0) {
             n = n / 10;
             counter++;
         }
+        amountDigits = counter;
         int m = temp;
         int a;
         int[] holdDigit = new int[counter];
 
         while(m > 0) {
             a = m % 10;
-            holdDigit[counter-1] = a;
+            holdDigit[counter - 1] = a;
             m = m / 10;
             counter--;
         }
