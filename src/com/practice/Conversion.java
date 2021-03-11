@@ -1,7 +1,10 @@
 package com.practice;
 
+import java.util.LinkedList;
+import java.util.List;
 
 public class Conversion {
+    private List<String> holdString = new LinkedList<String>();
     private static int amountDigits;
 
     public String solution(int n) {
@@ -40,6 +43,7 @@ public class Conversion {
                     System.out.print(j);
                 }
                 System.out.println("\n" + amountDigits);
+                System.out.println(patternRecognition(converting(n)));
         }
         return "?";
     }
@@ -64,4 +68,37 @@ public class Conversion {
         }
         return holdDigit;
     }
+
+
+    private List patternRecognition(int[] arrDigt) {
+        for(int i = 0; i < amountDigits; i++) {
+            if(amountDigits >= 3) {
+                if(arrDigt[0] > 0) {
+                    StringBuilder stringBuilder = new StringBuilder(arrDigt.length);
+                    while(arrDigt[i] > 0) {
+                        stringBuilder.append("M"); //using StringBuilder instead of +=
+                        arrDigt[0]--;
+                    }
+                    this.holdString.add(i, String.valueOf(stringBuilder)); //casting StringBuilder to string
+                    continue;
+                }
+                if(arrDigt[1] == 4) {
+                    StringBuilder stringBuilder = new StringBuilder(arrDigt.length);
+                    while(arrDigt[i] > 0) {
+                        stringBuilder.append("M"); //using StringBuilder instead of +=
+                        arrDigt[0]--;
+                    }
+                    this.holdString.add(i, String.valueOf(stringBuilder)); //casting StringBuilder to string
+                    continue;
+                }
+            }
+        }
+        return holdString;
+    }
 }
+
+/*                while(amountDigits > 0){
+                    holdChar += "M";
+                    amountDigits--;
+                }
+                System.out.println(holdChar);*/
