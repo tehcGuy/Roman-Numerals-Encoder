@@ -4,51 +4,41 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Conversion {
-    private List<String> holdString = new LinkedList<String>();
-    private static int amountDigits;
+    private List<String> holdString;
+    private int amountDigits;
+    private int incrsListIndx;
+    private int[] arr;
+
+    private StringBuilder stringBuilder; //StringBuilder helps with appending in the for loop
 
     public String solution(int n) {
-        switch(n) {
-            case 1:
-                return "I";
-            case 2:
-                return "II";
-            case 3:
-                return "III";
-            case 4:
-                return "IV";
-            case 5:
-                return "V";
-            case 6:
-                return "VI";
-            case 7:
-                return "VII";
-            case 8:
-                return "VIII";
-            case 9:
-                return "IX";
-            case 10:
-                return "X";
-            case 50:
-                return "L";
-            case 100:
-                return "C";
-            case 500:
-                return "D";
-            case 1000:
-                return "M";
-            default: //parsing
-                int[] arr = converting(n);
-                for(int j : arr) {
-                    System.out.print(j);
-                }
-                System.out.println("\n" + amountDigits);
-                System.out.println(patternRecognition(converting(n)));
+        holdString = new LinkedList<String>();
+        convertingDigtToArr(n);
+
+        for(int i = amountDigits; i > 0; i--) {
+            switch(i) { //basic
+                case 1:
+                    parsingOnes();
+                    break;
+                case 2:
+                    parsingTens();
+                    break;
+                case 3:
+                    parsingHundreds();
+                    break;
+                default:
+                    parsingThousands();
+            }
         }
-        return "?";
+        stringBuilder = new StringBuilder();
+        for(String s : holdString) {
+            stringBuilder.append(s);
+        }
+        reset();
+        return String.valueOf(stringBuilder);
     }
 
-    private int[] converting(int n) {
+    private void convertingDigtToArr(int n) {
         int counter = 0;
         int temp = n;
         while(n > 0) {
@@ -58,47 +48,95 @@ public class Conversion {
         amountDigits = counter;
         int m = temp;
         int a;
-        int[] holdDigit = new int[counter];
+        this.arr = new int[counter];
 
         while(m > 0) {
             a = m % 10;
-            holdDigit[counter - 1] = a;
+            arr[counter - 1] = a;
             m = m / 10;
             counter--;
         }
-        return holdDigit;
     }
 
-
-    private List patternRecognition(int[] arrDigt) {
-        for(int i = 0; i < amountDigits; i++) {
-            if(amountDigits >= 3) {
-                if(arrDigt[0] > 0) {
-                    StringBuilder stringBuilder = new StringBuilder(arrDigt.length);
-                    while(arrDigt[i] > 0) {
-                        stringBuilder.append("M"); //using StringBuilder instead of +=
-                        arrDigt[0]--;
-                    }
-                    this.holdString.add(i, String.valueOf(stringBuilder)); //casting StringBuilder to string
-                    continue;
-                }
-                if(arrDigt[1] == 4) {
-                    StringBuilder stringBuilder = new StringBuilder(arrDigt.length);
-                    while(arrDigt[i] > 0) {
-                        stringBuilder.append("M"); //using StringBuilder instead of +=
-                        arrDigt[0]--;
-                    }
-                    this.holdString.add(i, String.valueOf(stringBuilder)); //casting StringBuilder to string
-                    continue;
-                }
+    private void parsingOnes() {
+        stringBuilder = new StringBuilder();
+        if(this.arr[incrsListIndx] > 0 && this.arr[incrsListIndx] < 4) {
+            for(int j = 0; j < this.arr[incrsListIndx]; j++) {
+                stringBuilder.append("I"); //using StringBuilder instead of +=
             }
+        } else if(this.arr[incrsListIndx] == 4) {
+            stringBuilder.append("IV");
+        } else if(this.arr[incrsListIndx] == 5) {
+            stringBuilder.append("V");
+        } else if(this.arr[incrsListIndx] > 5 && arr[incrsListIndx] < 9) {
+            stringBuilder.append("V");
+            for(int j = 0; j < (this.arr[incrsListIndx] - 5); j++) {
+                stringBuilder.append("I");
+            }
+        } else if(this.arr[incrsListIndx] == 9) {
+            stringBuilder.append("IX");
         }
-        return holdString;
+        this.holdString.add(incrsListIndx, String.valueOf(stringBuilder));
+        incrsListIndx++;
+    }
+
+    private void parsingTens() {
+        stringBuilder = new StringBuilder(this.arr.length);
+        if(this.arr[incrsListIndx] > 0 && this.arr[incrsListIndx] < 4) {
+            for(int j = 0; j < this.arr[incrsListIndx]; j++) {
+                stringBuilder.append("X");
+            }
+        } else if(this.arr[incrsListIndx] == 4) {
+            stringBuilder.append("XL");
+        } else if(this.arr[incrsListIndx] == 5) {
+            stringBuilder.append("L");
+        } else if(this.arr[incrsListIndx] > 5 && arr[incrsListIndx] < 9) {
+            stringBuilder.append("L");
+            for(int j = 0; j < (this.arr[incrsListIndx] - 5); j++) {
+                stringBuilder.append("X");
+            }
+        } else if(this.arr[incrsListIndx] == 9) {
+            stringBuilder.append("XC");
+        }
+        this.holdString.add(incrsListIndx, String.valueOf(stringBuilder));
+        incrsListIndx++;
+    }
+
+    private void parsingHundreds() {
+        stringBuilder = new StringBuilder(this.arr.length);
+        if(this.arr[incrsListIndx] > 0 && this.arr[incrsListIndx] < 4) {
+            for(int j = 0; j < this.arr[incrsListIndx]; j++) {
+                stringBuilder.append("C");
+            }
+        } else if(this.arr[incrsListIndx] == 4) {
+            stringBuilder.append("CD");
+        } else if(this.arr[incrsListIndx] == 5) {
+            stringBuilder.append("D");
+        } else if(this.arr[incrsListIndx] > 5 && arr[incrsListIndx] < 9) {
+            stringBuilder.append("D");
+            for(int j = 0; j < (this.arr[incrsListIndx] - 5); j++) {
+                stringBuilder.append("C");
+            }
+        } else if(this.arr[incrsListIndx] == 9) {
+            stringBuilder.append("CM");
+        }
+        this.holdString.add(incrsListIndx, String.valueOf(stringBuilder));
+        incrsListIndx++;
+    }
+
+    private void parsingThousands() {
+        stringBuilder = new StringBuilder(this.arr.length);
+        for(int j = 0; j < this.arr[incrsListIndx]; j++) {
+            stringBuilder.append("M");
+        }
+        this.holdString.add(incrsListIndx, String.valueOf(stringBuilder));
+        incrsListIndx++;
+    }
+
+    private void reset() { //if I use the same object, I need to reset the the fields
+        this.holdString = null;
+        this.amountDigits = 0;
+        this.incrsListIndx = 0;
+        this.arr = null;
     }
 }
-
-/*                while(amountDigits > 0){
-                    holdChar += "M";
-                    amountDigits--;
-                }
-                System.out.println(holdChar);*/

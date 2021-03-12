@@ -4,7 +4,10 @@ package com.practice;
 public class Main {
 
     public static void main(String[] args) {
-	    Conversion obj = new Conversion();
-	    obj.solution(5212);
+        Conversion conversion = new Conversion();
+        Solution2 conversion2 = new Solution2();
+
+
+        System.out.println(conversion2.solution(988));
     }
 }
